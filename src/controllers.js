@@ -108,11 +108,11 @@ var MainCtrl = function ($scope, $http, scripting,$sce,$location) { // $location
 
     $scope.calcname = "";
     window.rscope = $scope;
-    $http.get("/calclist").success(function (r) {
+    $http.get("/calclist").then(function (r) {
         $(".css-treeview").html(r);
 
 
-    }).error(function () {
+    }, function () {
         console.log("list loading failed");
 
     });
@@ -954,14 +954,14 @@ var MainCtrl = function ($scope, $http, scripting,$sce,$location) { // $location
 var app =  angular.module('hex', [uibootstrap,angular_route]); // ngRoute
 
 
-app.config(function ($routeProvider,$locationProvider) {
+app.config(["$routeProvider", "$locationProvider", function ($routeProvider,$locationProvider) {
     $locationProvider.html5Mode({
         enabled:true,
         rewriteLinks: false,
     });
     $routeProvider.when("/rus", {templateUrl:"/templates/rus.html"});
     $routeProvider.when("/eng", {templateUrl:"/templates/eng.html"});
-});
+}]);
 
 
 app.controller('main', ['$scope','$http','scripting',"$sce","$location", MainCtrl]); // $location

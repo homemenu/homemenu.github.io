@@ -1,51 +1,87 @@
-var path = require('path');
-var webpack = require('webpack');
+const webpack = require('webpack');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin");
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
+/* This describes the behavior of webpack.
+ */
+module.exports = {
+  /* The main javascript file for the application
+   */
+  entry: {
+    index: ["./src/index.js", "./views/css/vendor.scss"],
+    vendor: "./src/vendor.js",
+  },
 
-var e = {
-    entry: [
-        //"./views/lib/sw.js",
-        "./views/material/js/ripples.min.js",
-        "./views/material/js/material.min.js",
-        './src/index.js'],
-    output: {
-        path: './dist/',
-        filename: 'index.js',
-        devtoolModuleFilenameTemplate: '[absolute-resource-path]'
-    },
+  /* Just... ignore this for now.
+   */
+  performance: {
+    hints: false
+  },
 
-    module: {
-        loaders: [
-            {
-                test: /.js?$/,
-                loader: 'babel-loader',
-                exclude: [/node_modules/,/views/],
-                query: {
-                    presets: ['react', 'es2015','stage-0']
-                }
-            }
+  /* The default mode.
+   */
+  mode: "production",
+
+  /* The eventual transpiled output file.
+   */
+  output: {
+    path: __dirname + "/dist",
+    filename: "[name].js",
+    sourceMapFilename: "compiled-[name].js.map"
+  },
+
+  /* We want source maps!
+   */
+  devtool: "source-map",
+
+  /* What file types to filter.
+   */
+  resolve: {
+    extensions: ['.js', '.css', '.scss']
+  },
+
+  /* How to load/import modules (for each file).
+   */
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /(node_modules|bower_components)/,
+        use: [
+          "babel-loader",
+          "eslint-loader",
         ]
-        ,
-    },
+      },
+      {
+        test: /\.s?css$/,
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+          },
+          "css-loader"
+        ]
+      }
+    ]
+  },
 
+  /* Minimize all vendored css */
+  optimization: {
+    minimizer: [
+      new OptimizeCssAssetsPlugin({}),
+      new UglifyJsPlugin()
+    ]
+  },
 
-    devServer: {
-        port: 8000,
-        contentBase: "./dist/",
-        colors: true,
-        inline:true,
-        historyApiFallback: true
-    },
-    plugins: [
-        new webpack.optimize.UglifyJsPlugin({
-            compress:{
-                warnings: false,
-            },
-            mangle: false
-    })],
-    devtool: 'source-map'
-
-
-};
-
-module.exports = e;
+  /* What plugins to use.
+   */
+  plugins: [
+    new MiniCssExtractPlugin({
+      // Options similar to the same options in webpackOptions.output
+      // both options are optional
+      filename: "../dist/css/vendor.css",
+      chunkFilename: "vendor.css"
+    }),
+    //new webpack.HotModuleReplacementPlugin(),
+  ]
+}

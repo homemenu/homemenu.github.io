@@ -1,0 +1,17 @@
+{
+  "extends": "stylelint-config-standard",
+  "ignoreFiles": [],
+  "plugins": [
+    "stylelint-scss"
+  ],
+  "rules": {
+    "indentation": 2,
+    "selector-nested-pattern": "^(?!&__|&--|&-|&_).*",
+    "selector-type-no-unknown": [
+      true,
+      { "ignore": ["custom-elements"] }
+    ],
+    "at-rule-no-unknown": null,
+    "scss/at-rule-no-unknown": true
+  }
+}
