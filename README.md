@@ -15,9 +15,21 @@ npm install
 npm install -g webpack-dev-server
 ```
 
-To start development server, run
+To build files to dist folder
 ```
-webpack-dev-server
+npm run build
 ```
 
-editor will be live at localhost:8000
+To start development server, run
+```
+webpack serve
+```
+editor will be live at localhost:8080
+
+
+Start node web server
+```
+node server.js
+```
+editor will be live at localhost:3000
+

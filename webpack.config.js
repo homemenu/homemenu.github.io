@@ -1,7 +1,4 @@
 const webpack = require('webpack');
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin");
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 /* This describes the behavior of webpack.
  */
@@ -52,36 +49,7 @@ module.exports = {
           "babel-loader",
           "eslint-loader",
         ]
-      },
-      {
-        test: /\.s?css$/,
-        use: [
-          {
-            loader: MiniCssExtractPlugin.loader,
-          },
-          "css-loader"
-        ]
       }
     ]
-  },
-
-  /* Minimize all vendored css */
-  optimization: {
-    minimizer: [
-      new OptimizeCssAssetsPlugin({}),
-      new UglifyJsPlugin()
-    ]
-  },
-
-  /* What plugins to use.
-   */
-  plugins: [
-    new MiniCssExtractPlugin({
-      // Options similar to the same options in webpackOptions.output
-      // both options are optional
-      filename: "../dist/css/vendor.css",
-      chunkFilename: "vendor.css"
-    }),
-    //new webpack.HotModuleReplacementPlugin(),
-  ]
+  }
 }
